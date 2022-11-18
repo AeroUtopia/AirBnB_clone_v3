@@ -52,7 +52,7 @@ def handle_a_state(state_id):
         storage.save()
         return jsonify({}), 200
     if request.method == 'PUT':
-        info = request.json
+        info = request.get_json(silent=True)
         if not info:
             abort(400, 'Not a JSON')
         for key, value in info.items():
