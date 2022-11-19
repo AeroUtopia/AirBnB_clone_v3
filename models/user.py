@@ -24,6 +24,28 @@ class User(BaseModel, Base):
         first_name = ""
         last_name = ""
 
+        @property
+        def places(self):
+            """getter attribute returns the list of Place instances"""
+            from models.place import Place
+            place_list = []
+            all_places = models.storage.all(Place)
+            for place in all_places.values():
+                if place.user_id == self.id:
+                    place_list.append(place)
+            return place_list
+
+        @property
+        def reviews(self):
+            """getter attribute returns the list of Review instances"""
+            from models.review import Review
+            review_list = []
+            all_reviews = models.storage.all(Review)
+            for review in all_reviews.values():
+                if review.user_id == self.id:
+                    review_list.append(review)
+            return review_list
+
     def __init__(self, *args, **kwargs):
         """initializes user"""
         super().__init__(*args, **kwargs)
