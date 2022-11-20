@@ -20,14 +20,13 @@ def place_amenity(place_id):
     if place is None:
         abort(404)
 
-    if request.method == 'GET':
-        if storage_t == 'db':
-            amenity_list = []
-            for amenity in place.amenities:
-                amenity_list.append(amenity.to_dict())
-            return jsonify(amenity_list)
-        else:
-            return jsonify(place.amenity_ids)
+    if storage_t == 'db':
+        amenity_list = []
+        for amenity in place.amenities:
+            amenity_list.append(amenity.to_dict())
+        return jsonify(amenity_list)
+    else:
+        return jsonify(place.amenity_ids)
 
 
 @app_views.route('places/<place_id>/amenities/<amenity_id>',
