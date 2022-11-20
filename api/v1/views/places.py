@@ -70,3 +70,66 @@ def place_object(place_id):
                 setattr(place, key, value)
         place.save()
         return jsonify(place.to_dict()), 200
+
+
+@app_views.route('/places_search', methods=['POST'], strict_slashes=False)
+def place_search():
+    """
+        Searching for a place using filters: State, City & Amenity
+    """
+    info = request.get_json(silent=True)
+    if info is None:
+        abort(400, 'Not a JSON')
+
+    places = storage.all(Place)
+    place_list = []
+
+    count = 0
+    for key in info.keys():
+        if len(info[key]) > 0 and key in ['states', 'cities', 'amenities']:
+            count = 1
+            break
+    if len(info) == 0 or count == 0:
+        for place in places:
+            place_list.append(place.to_dict())
+        return jsonify(place_list)
+
+    if 'amenities' in info and len(info['amenities']) > 0:
+        for a_id in info['amenities']:
+            for place in places.values():
+                for amenity in place.amenities:
+                    if amenity.id == a_id:
+                        place_list.append(place)
+                        break
+    else:
+        for place in places.values():
+            place_list.append(place)
+
+    if 'cities' in info and len(info['cities']) > 0:
+        tmp = []
+        for c_id in info['cities']:
+            for place in place_list:
+                if place.city_id == c_id:
+                    tmp.append(place)
+        if 'states' in info and len(info['states']) > 0:
+            for s_id in info['states']:
+                for place in place_list:
+                    city_id = place.city_id
+                    city = storage.get(City, city_id)
+                    if city.state_id == s_id and place not in tmp:
+                        tmp.append(place)
+        place_list = tmp
+    elif 'states' in info and len(info['states']) > 0:
+        tmp = []
+        for s_id in info['states']:
+            for place in place_list:
+                city_id = place.city_id
+                city = storage.get(City, city_id)
+                if city.state_id == s_id:
+                    tmp.append(place)
+        place_list = tmp
+
+    tmp = []
+    for place in place_list:
+        tmp.append(place.to_dict())
+    return jsonify(tmp)
