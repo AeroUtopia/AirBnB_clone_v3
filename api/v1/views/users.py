@@ -57,7 +57,7 @@ def user_object(user_id):
         if not info:
             abort(400, 'Not a JSON')
         for key, value in info.items():
-            if key in ['id', 'created_at', 'updated_at']:
+            if key in ['id', 'created_at', 'updated_at', 'email']:
                 pass
             else:
                 setattr(user, key, value)

@@ -64,7 +64,7 @@ def place_object(place_id):
         if not info:
             abort(400, 'Not a JSON')
         for key, value in info.items():
-            if key in ['id', 'created_at', 'updated_at']:
+            if key in ['id', 'created_at', 'updated_at', 'user_id', 'city_id']:
                 pass
             else:
                 setattr(place, key, value)
