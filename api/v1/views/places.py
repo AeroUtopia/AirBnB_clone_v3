@@ -90,7 +90,7 @@ def place_search():
         if len(info[key]) > 0 and key in ['states', 'cities', 'amenities']:
             count = 1
             break
-    if len(info) == 0 or count == 0:
+    if len(info) == 0 or count == 0 or not info:
         for place in places.values():
             place_list.append(place.to_dict())
         return jsonify(place_list)
