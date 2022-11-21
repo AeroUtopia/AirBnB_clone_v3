@@ -78,7 +78,7 @@ def place_search():
         Searching for a place using filters: State, City & Amenity
     """
     info = request.get_json(silent=True)
-    if info is None:
+    if not info:
         abort(400, 'Not a JSON')
 
     places = storage.all(Place)
