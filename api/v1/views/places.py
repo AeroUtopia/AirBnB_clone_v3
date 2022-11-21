@@ -131,5 +131,8 @@ def place_search():
 
     tmp = []
     for place in place_list:
-        tmp.append(place.to_dict())
+        result = place.to_dict()
+        if 'amenities' in result:
+            del result['amenities']
+        tmp.append(result)
     return jsonify(tmp)
