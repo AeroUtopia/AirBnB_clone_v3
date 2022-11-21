@@ -90,7 +90,7 @@ def place_search():
             count = 1
             break
     if len(info) == 0 or count == 0:
-        for place in places:
+        for place in places.values():
             place_list.append(place.to_dict())
         return jsonify(place_list)
 
