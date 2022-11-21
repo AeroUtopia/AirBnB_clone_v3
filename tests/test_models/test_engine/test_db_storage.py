@@ -85,7 +85,7 @@ class TestDBStorage(unittest.TestCase):
         new_user = User(**{'first_name': 'jack',
                            'last_name': 'bond',
                            'email': 'jack@bond.com',
-                           'password': 12345})
+                           'password': '12345'})
         cur = db.cursor()
         cur.execute('SELECT COUNT(*) FROM users')
         old_count = cur.fetchall()
@@ -127,7 +127,7 @@ class TestDBStorage(unittest.TestCase):
         result = cursor.fetchone()
         self.assertTrue(result is not None)
         self.assertIn('john2020@gmail.com', result)
-        self.assertIn('password', result)
+        self.assertFalse('password' in result)
         self.assertIn('John', result)
         self.assertIn('Zoldyck', result)
         cursor.close()
@@ -156,7 +156,7 @@ class TestDBStorage(unittest.TestCase):
         result = cursor.fetchone()
         self.assertTrue(result is not None)
         self.assertIn('john2020@gmail.com', result)
-        self.assertIn('password', result)
+        self.assertFalse('password' in result)
         self.assertIn('John', result)
         self.assertIn('Zoldyck', result)
         self.assertIn(obj_key, storage.all(User).keys())
