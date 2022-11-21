@@ -8,6 +8,7 @@ from flask import jsonify, abort, request
 from models import storage, storage_t
 from models.city import City
 from models.place import Place
+from models.state import State
 from models.user import User
 
 
@@ -116,6 +117,13 @@ def place_search():
                     tmp.append(place)
         if 'states' in info and len(info['states']) > 0:
             for s_id in info['states']:
+                state = storage.get(State, s_id)
+                for city in state.cities:
+                    if city.id in info['cities']:
+                        count = 2
+                        break
+                if count == 2:
+                    continue
                 for place in place_list:
                     city_id = place.city_id
                     city = storage.get(City, city_id)
