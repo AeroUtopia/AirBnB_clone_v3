@@ -102,10 +102,9 @@ def place_search():
                 amenity = storage.get(Amenity, a_id)
                 if amenity in place.amenities and place not in place_list:
                     place_list.append(place)
-                elif amenity not in place.amenities and place in place_list:
-                    place_list.remove(place)
-                    break
                 elif amenity not in place.amenities:
+                    if place in place_list:
+                        place_list.remove(place)
                     break
     else:
         for place in places.values():
