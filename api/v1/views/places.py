@@ -96,18 +96,8 @@ def place_search():
             place_list.append(place.to_dict())
         return jsonify(place_list)
 
-    if 'amenities' in info and len(info['amenities']) > 0:
-        for a_id in info['amenities']:
-            amenity = storage.get(Amenity, a_id)
-            for place in places.values():
-                if (amenity in place.amenities) and (place not in place_list):
-                    place_list.append(place)
-                if (amenity not in place.amenities) and (place in place_list):
-                    place_list.remove(place)
-
-    else:
-        for place in places.values():
-            place_list.append(place)
+    for place in places.values():
+        place_list.append(place)
 
     if 'cities' in info and len(info['cities']) > 0:
         tmp = []
@@ -139,6 +129,13 @@ def place_search():
                 if city.state_id == s_id:
                     tmp.append(place)
         place_list = tmp
+
+    if 'amenities' in info and len(info['amenities']) > 0:
+        for a_id in info['amenities']:
+            amenity = storage.get(Amenity, a_id)
+            for place in place_list:
+                if amenity not in place.amenities:
+                    place_list.remove(place)
 
     tmp = []
     for place in place_list:
