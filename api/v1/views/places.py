@@ -105,7 +105,8 @@ def place_search():
                 elif amenity not in place.amenities and place in place_list:
                     place_list.remove(place)
                     break
-
+                elif amenity not in place.amenities:
+                    break
     else:
         for place in places.values():
             place_list.append(place)
